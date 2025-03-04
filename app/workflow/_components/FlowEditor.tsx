@@ -126,7 +126,7 @@ export const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
 
     const detectedCycle = hasCycle(target)
     return !detectedCycle;
-  }, [nodes])
+  }, [nodes, edges])
 
   return (
     <main className="h-full w-full">
