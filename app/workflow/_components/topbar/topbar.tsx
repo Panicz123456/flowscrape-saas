@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { SaveBtn } from "./SaveButton"
+import { ExecuteBtn } from "./ExecuteBtn"
 
 interface iAppProps  { 
   title: string;
@@ -36,6 +37,7 @@ export const Topbar = ({title, subtitle, workflowId}: iAppProps) => {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
+        <ExecuteBtn workflowId={workflowId} />
         <SaveBtn workflowId={workflowId} />
       </div>
     </header>
