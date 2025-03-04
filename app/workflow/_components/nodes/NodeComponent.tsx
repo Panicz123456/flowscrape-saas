@@ -18,7 +18,7 @@ export const NodeComponents = memo((props: NodeProps) => {
           <NodeInput key={input.name} input={input} nodeId={props.id} />
         ))}
       </NodeInputs>
-      
+
       <NodeOutputs>
         {task.outputs.map((output) => (
           <NodeOutput key={output.name} output={output} />

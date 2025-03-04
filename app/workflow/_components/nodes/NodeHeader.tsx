@@ -7,7 +7,7 @@ import { TaskType } from "@/types/task";
 import { useReactFlow } from "@xyflow/react";
 import { CoinsIcon, CopyIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
 
-export const NodeHeader = ({ taskType, nodeId }: { taskType: TaskType, nodeId: string }) => {
+export const NodeHeader = ({ taskType, nodeId, }: { taskType: TaskType, nodeId: string,  }) => {
   const task = TaskRegistry[taskType];
   const { deleteElements, getNode, addNodes } = useReactFlow()
   return (
@@ -21,7 +21,7 @@ export const NodeHeader = ({ taskType, nodeId }: { taskType: TaskType, nodeId: s
           {task.isEntryPoint && <Badge>Entry point </Badge>}
           <Badge className="gap-2 flex items-center text-xs">
             <CoinsIcon size={16} />
-            TODO
+            {task.credits}
           </Badge>
           {!task.isEntryPoint && (
             <>
