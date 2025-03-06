@@ -1,10 +1,11 @@
 
-import { flowToExecutionPlan, FlowToExecutionPlanValidationError } from "@/lib/workflow/executionPlan";
 import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
 import useFlowValidation from "./useFlowValidation";
 import { toast } from "sonner";
 import { AppNode, AppNodeMissingInputs } from "@/types/appNode";
+import { FlowToExecutionPlanValidationError } from "@/types/workflow";
+import { flowToExecutionPlan } from "@/lib/workflow/executionPlan";
 
 export const useExecutionPlan = () => {
   const { toObject } = useReactFlow();

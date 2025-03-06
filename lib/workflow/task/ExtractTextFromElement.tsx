@@ -6,27 +6,27 @@ export const ExtractTextFromElementTask = {
   type: TaskType.EXTRACT_TEXT_FROM_ELEMENT,
   label: "Extract text from element",
   icon: (props: LucideProps) => (
-    <TextIcon className="stroke-pink-400" {...props} />
+    <TextIcon className="stroke-rose-400" {...props} />
   ),
   isEntryPoint: false,
-  credits: 2,
   inputs: [
     {
       name: "Html",
       type: TaskParamType.STRING,
-      require: true,
-      variant: "textarea"
+      required: true,
+      variant: "textarea",
     },
     {
       name: "Selector",
       type: TaskParamType.STRING,
-      require: true
-    }
-  ],
+      required: true,
+    },
+  ] as const,
   outputs: [
     {
       name: "Extracted Text",
-      type: TaskParamType.STRING
+      type: TaskParamType.STRING,
     },
-  ]
+  ] as const,
+  credits: 2,
 } satisfies WorkflowTask;

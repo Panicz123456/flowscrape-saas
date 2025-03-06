@@ -23,3 +23,8 @@ export type WorkflowExecutionPlanPhase = {
 };
 
 export type WorkflowExecutionPlan = WorkflowExecutionPlanPhase[];
+
+export enum FlowToExecutionPlanValidationError {
+  "NO_ENTRY_POINT",
+  "INVALID_INPUTS",
+}

@@ -1,13 +1,8 @@
-import { Edge } from "@xyflow/react";
-
-import { TaskRegistry } from "./task/registry";
 import { AppNode, AppNodeMissingInputs } from "@/types/appNode";
-import { WorkflowExecutionPlan, WorkflowExecutionPlanPhase } from "@/types/workflow";
+import { FlowToExecutionPlanValidationError, WorkflowExecutionPlan, WorkflowExecutionPlanPhase } from "@/types/workflow";
+import { Edge } from "@xyflow/react";
+import { TaskRegistry } from "./task/registry";
 
-export enum FlowToExecutionPlanValidationError { 
-  "NO_ENTRY_POINT",
-  "INVALID_INPUTS"
-}
 
 type flowToExecutionPlan = {
   executionPlan?: WorkflowExecutionPlan;
@@ -54,7 +49,7 @@ export function flowToExecutionPlan(
     phase <= nodes.length && planned.size < nodes.length;
     phase++
   ) {
-    const nextPhase: WorkflowExecutionPlanPhase = { phase, nodes: [] };
+    const nextPhase: WorkflowExecutionPlanPhase= { phase, nodes: [] };
     for (const currentNode of nodes) {
       if (planned.has(currentNode.id)) {
         // Node is already planned for execution
