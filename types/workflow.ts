@@ -28,3 +28,22 @@ export enum FlowToExecutionPlanValidationError {
   "NO_ENTRY_POINT",
   "INVALID_INPUTS",
 }
+
+export enum WorkflowExecutionStatus {
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum ExecutionPhaseStatus {
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum WorkflowExecutionTrigger {
+  MANUAL = "MANUAL",
+}
