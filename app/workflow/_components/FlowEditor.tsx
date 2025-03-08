@@ -12,6 +12,7 @@ import {
   Edge,
   getOutgoers,
   ReactFlow,
+  ReactFlowProvider,
   useEdgesState,
   useNodesState,
   useReactFlow,
@@ -130,6 +131,7 @@ export const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
 
   return (
     <main className="h-full w-full">
+
       <ReactFlow
         nodes={nodes}
         edges={edges}

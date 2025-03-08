@@ -9,6 +9,7 @@ import { flowToExecutionPlan } from "@/lib/workflow/executionPlan";
 
 export const useExecutionPlan = () => {
   const { toObject } = useReactFlow();
+
   const { clearErrors, setInvalidInputs } = useFlowValidation();
 
   const handleError = useCallback(

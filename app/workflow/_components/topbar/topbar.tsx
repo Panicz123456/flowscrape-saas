@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation"
 import { SaveBtn } from "./SaveButton"
 import { ExecuteBtn } from "./ExecuteBtn"
 
-interface iAppProps  { 
+interface iAppProps {
   title: string;
-  workflowId: string
+  workflowId: string;
   subtitle?: string;
+  hideButtons?: boolean
 }
 
-export const Topbar = ({title, subtitle, workflowId}: iAppProps) => {
+export const Topbar = ({ title, subtitle, workflowId, hideButtons = false }: iAppProps) => {
   const router = useRouter()
 
   return (
@@ -31,14 +32,18 @@ export const Topbar = ({title, subtitle, workflowId}: iAppProps) => {
         </TooltipWrapper>
         <div>
           <h1 className="font-bold text-ellipsis truncate">{title}</h1>
-          {subtitle && ( 
+          {subtitle && (
             <p className="text-xs text-muted-foreground truncate text-ellipsis">{subtitle}</p>
           )}
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
-        <ExecuteBtn workflowId={workflowId} />
-        <SaveBtn workflowId={workflowId} />
+        {!hideButtons && (
+          <>
+            <ExecuteBtn workflowId={workflowId} />
+            <SaveBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   )
