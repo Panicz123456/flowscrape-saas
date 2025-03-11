@@ -55,7 +55,7 @@ model ExecutionPhase {
   number      Int
   node        String
   name        String
-  statedAt    DateTime?
+  startedAt   DateTime?
   completedAt DateTime?
   inputs      String?
   outputs     String?

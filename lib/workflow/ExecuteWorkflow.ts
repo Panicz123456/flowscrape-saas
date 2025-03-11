@@ -2,6 +2,11 @@ import "server-only";
 import prisma from "../prisma";
 import {revalidatePath} from "next/cache";
 import {ExecutionPhaseStatus, WorkflowExecutionStatus} from "@/types/workflow";
+import {ExecutionPhase} from "@prisma/client";
+import {AppNode} from "@/types/appNode";
+import {TaskRegistry} from "@/lib/workflow/task/registry";
+import {TaskType} from "@/types/task";
+import {ExecutionRegistry} from "@/lib/workflow/executor/registry";
 
 export async function ExecutionWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -30,7 +35,11 @@ export async function ExecutionWorkflow(executionId: string) {
 
   for (const phase of execution.phases) {
     // TODO: consume Credits
-    // TODO: execution phases
+    const phaseExecution = await executeWorkflowPhase(phase)
+    if (!phaseExecution.success) {
+      executionFailed = false;
+      break;
+    }
   }
 
   await finalizeWorkflowExecution(
@@ -117,3 +126,48 @@ async function finalizeWorkflowExecution(
     console.log(err)
   })
 }
+
+async function executeWorkflowPhase(phase: ExecutionPhase) {
+  const startedAt = new Date();
+  const node = JSON.parse(phase.node) as AppNode
+
+  //Update phase status
+  await prisma.executionPhase.update({
+    where: {
+      id: phase.id
+    },
+    data: {
+      status: ExecutionPhaseStatus.RUNNING,
+      startedAt,
+    }
+  })
+
+  const creditsRequired = TaskRegistry[node.data.type].credits
+  console.log(
+    `Executing phase ${phase.name} with ${creditsRequired} credits Required`
+  )
+
+  // TODO: decrement user balance (with required credits)
+
+  const success = Math.random() < 0.7
+
+  await finalizePhase(phase.id, success)
+  return {success}
+}
+
+async function finalizePhase(phaseId: string, success: boolean) {
+  const finalStatus = success
+    ? ExecutionPhaseStatus.COMPLETED
+    : ExecutionPhaseStatus.FAILED
+
+  await prisma.executionPhase.update({
+    where: {
+      id: phaseId
+    },
+    data: {
+      status: finalStatus,
+      completedAt: new Date()
+    }
+  })
+}
+

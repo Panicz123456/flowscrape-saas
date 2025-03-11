@@ -1,17 +1,26 @@
 'use client'
 
-import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/GetWorkflowExecutionWithPhases"
-import { GetWorkflowPhasesDetails } from "@/actions/workflows/GetWorkflowPhasesDetails";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { DatesToDurationString } from "@/lib/dates";
-import { GetPhasesTotalCost } from "@/lib/phases";
-import { WorkflowExecutionStatus } from "@/types/workflow";
-import { useQuery } from "@tanstack/react-query";
-import { formatDistanceToNow } from "date-fns";
-import { CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react";
-import { useState } from "react";
+import {GetWorkflowExecutionWithPhases} from "@/actions/workflows/GetWorkflowExecutionWithPhases"
+import {GetWorkflowPhasesDetails} from "@/actions/workflows/GetWorkflowPhasesDetails";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Separator} from "@/components/ui/separator";
+import {DatesToDurationString} from "@/lib/dates";
+import {GetPhasesTotalCost} from "@/lib/phases";
+import {ExecutionPhaseStatus, WorkflowExecutionStatus} from "@/types/workflow";
+import {useQuery} from "@tanstack/react-query";
+import {formatDistanceToNow} from "date-fns";
+import {
+  CalendarIcon,
+  CircleDashedIcon,
+  ClockIcon,
+  CoinsIcon,
+  Loader2,
+  Loader2Icon,
+  LucideIcon,
+  WorkflowIcon
+} from "lucide-react";
+import {useState} from "react";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -71,7 +80,7 @@ export const ExecutionViewer = ({
           <ExecutionLabel
             icon={ClockIcon}
             label="Duration"
-            value={duration ? duration : <Loader2Icon className="animate-spin" size={20} />}
+            value={duration ? duration : <Loader2Icon className="animate-spin" size={20}/>}
           />
           <ExecutionLabel
             icon={CoinsIcon}
@@ -79,14 +88,14 @@ export const ExecutionViewer = ({
             value={creditsConsumed}
           />
         </div>
-        <Separator />
+        <Separator/>
         <div className="flex justify-center items-center py-2 px-4">
           <div className="text-muted-foreground flex items-center gap-2">
-            <WorkflowIcon size={20} className="stroke-muted-foreground/80" />
+            <WorkflowIcon size={20} className="stroke-muted-foreground/80"/>
             <span className="font-semibold">Phases</span>
           </div>
         </div>
-        <Separator />
+        <Separator/>
         <div className="overflow-auto h-full px-2 py-4">
           {query.data?.phases.map((phase, index) => (
             <Button
@@ -112,7 +121,9 @@ export const ExecutionViewer = ({
         </div>
       </aside>
       <div className="flex w-full h-full">
-        
+        <pre>
+          {JSON.stringify(phaseDetails.data, null, 4)}
+        </pre>
       </div>
     </div>
   )
