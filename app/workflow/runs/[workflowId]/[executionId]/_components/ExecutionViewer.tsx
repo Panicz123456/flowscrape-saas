@@ -1,6 +1,7 @@
 'use client'
 
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/GetWorkflowExecutionWithPhases"
+import { GetWorkflowPhasesDetails } from "@/actions/workflows/GetWorkflowPhasesDetails";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +11,7 @@ import { WorkflowExecutionStatus } from "@/types/workflow";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader2, Loader2Icon, LucideIcon, WorkflowIcon } from "lucide-react";
+import { useState } from "react";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -19,6 +21,7 @@ export const ExecutionViewer = ({
   initialData: ExecutionData
 }) => {
 
+  const [selectedPhase, setSelectedPhase] = useState<string | null>(null)
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
@@ -26,6 +29,14 @@ export const ExecutionViewer = ({
     refetchInterval: (q) =>
       q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
   })
+
+  const phaseDetails = useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled: selectedPhase !== null,
+    queryFn: () => GetWorkflowPhasesDetails(selectedPhase!)
+  })
+
+  const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING
 
   const duration = DatesToDurationString(
     query.data?.competedAt,
@@ -79,9 +90,13 @@ export const ExecutionViewer = ({
         <div className="overflow-auto h-full px-2 py-4">
           {query.data?.phases.map((phase, index) => (
             <Button
-              key={index}
+              key={phase.id}
               className="w-full justify-between"
-              variant="ghost"
+              variant={selectedPhase === phase.id ? "secondary" : "ghost"}
+              onClick={() => {
+                if (isRunning) return
+                setSelectedPhase(phase.id)
+              }}
             >
               <div className="flex items-center gap-2">
                 <Badge variant="outline">{index + 1}</Badge>
@@ -89,10 +104,16 @@ export const ExecutionViewer = ({
                   {phase.name}
                 </p>
               </div>
+              <p className="text-xs text-muted-foreground">
+                {phase.status}
+              </p>
             </Button>
           ))}
         </div>
       </aside>
+      <div className="flex w-full h-full">
+        
+      </div>
     </div>
   )
 }
