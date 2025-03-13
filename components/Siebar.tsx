@@ -16,7 +16,7 @@ import { useState } from "react";
 
 const routes = [
   {
-    href: "",
+    href: "home",
     label: "Home",
     icon: HomeIcon,
   },
