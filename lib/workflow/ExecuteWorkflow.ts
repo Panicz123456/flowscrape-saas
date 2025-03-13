@@ -5,8 +5,7 @@ import {ExecutionPhaseStatus, WorkflowExecutionStatus} from "@/types/workflow";
 import {ExecutionPhase} from "@prisma/client";
 import {AppNode} from "@/types/appNode";
 import {TaskRegistry} from "@/lib/workflow/task/registry";
-import {TaskType} from "@/types/task";
-import {ExecutionRegistry} from "@/lib/workflow/executor/registry";
+import {ExecutorRegistry} from "@/lib/workflow/executor/registry";
 
 export async function ExecutionWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -149,7 +148,7 @@ async function executeWorkflowPhase(phase: ExecutionPhase) {
 
   // TODO: decrement user balance (with required credits)
 
-  const success = Math.random() < 0.7
+  const success = await executePhase(phase, node)
 
   await finalizePhase(phase.id, success)
   return {success}
@@ -169,5 +168,17 @@ async function finalizePhase(phaseId: string, success: boolean) {
       completedAt: new Date()
     }
   })
+}
+
+async function executePhase(
+  phase: ExecutionPhase,
+  node: AppNode,
+): Promise<boolean> {
+  const runFc = ExecutorRegistry[node.data.type];
+  if (!runFc) {
+    return false
+  }
+
+  return await runFc()
 }
 
