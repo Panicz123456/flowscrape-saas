@@ -8,12 +8,13 @@ export async function ExtractTextFromElementExecutor(
   try {
     const selector = environment.getInput("Selector")
     if (!selector) {
-      console.error("selector not found")
+      environment.log.error("Selector not found");
       return false;
     }
+
     const html  = environment.getInput("Html")
     if (!html) {
-      console.error("html not found")
+      environment.log.error("html not found");
       return false;
     }
 
@@ -21,21 +22,21 @@ export async function ExtractTextFromElementExecutor(
     const element = $(selector);
 
     if (!element) {
-      console.error("Element not found")
+      environment.log.error("Element not found");
       return false
     }
 
     const extractedText = $.text(element)
     if(!extractedText) {
-      console.error("Element has no text")
+      environment.log.error("Element has no text");
       return false
     }
 
     environment.setOutput("Extracted Text", extractedText)
 
     return true
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    environment.log.error(error.message)
     return false
   }
 }
