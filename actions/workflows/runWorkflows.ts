@@ -65,6 +65,7 @@ export async function RunWorkflow(form: {
       status: WorkflowExecutionStatus.PENDING,
       startedAt: new Date(),
       trigger: WorkflowExecutionTrigger.MANUAL,
+      definition: flowDefinition,
       phases: {
         create: executionPlan.flatMap((phase) => {
           return phase.nodes.flatMap((node) => {
@@ -89,7 +90,7 @@ export async function RunWorkflow(form: {
     throw new Error("workflow execution not created");
   }
 
-  ExecutionWorkflow(execution.id); 
+  await ExecutionWorkflow(execution.id);
 
   redirect(`/workflow/runs/${workflowId}/${execution.id}`);
 }
