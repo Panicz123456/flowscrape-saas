@@ -1,5 +1,5 @@
 import { BreadcrumbHeader } from "@/components/BreadcrumbHeader";
-import { DesktopSidebar } from "@/components/Siebar";
+import { DesktopSidebar } from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeToggleMode";
 import { Separator } from "@/components/ui/separator";
 import { SignedIn, UserButton, UserProfile } from "@clerk/nextjs";

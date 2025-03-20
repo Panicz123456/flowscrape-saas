@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
-import { MobileSidebar } from "./Siebar";
+import { MobileSidebar } from "./Sidebar";
 
 export const BreadcrumbHeader = () => {
   const pathname = usePathname();

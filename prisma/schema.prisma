@@ -61,7 +61,7 @@ model ExecutionPhase {
   inputs      String?
   outputs     String?
 
-  creditsCost Int?
+  creditsConsumed Int?
 
   workflowExecutionId String
   execution           WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
@@ -77,4 +77,9 @@ model ExecutionLog {
 
   executionPhaseId String
   executionPhase   ExecutionPhase @relation(fields: [executionPhaseId], references: [id], onDelete: Cascade)
+}
+
+model userBalance { 
+  userId String @id
+  credits Int @default(0)
 }
