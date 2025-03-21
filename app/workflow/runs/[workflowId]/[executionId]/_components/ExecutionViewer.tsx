@@ -1,20 +1,20 @@
 'use client'
 
-import {useEffect, useState} from "react";
-import {useQuery} from "@tanstack/react-query";
-import {formatDistanceToNow} from "date-fns";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 
-import {GetWorkflowExecutionWithPhases} from "@/actions/workflows/GetWorkflowExecutionWithPhases"
-import {GetWorkflowPhasesDetails} from "@/actions/workflows/GetWorkflowPhasesDetails";
-import {ExecutionLog} from "@prisma/client";
-import {GetPhasesTotalCost} from "@/lib/phases";
-import {DatesToDurationString} from "@/lib/dates";
+import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/GetWorkflowExecutionWithPhases"
+import { GetWorkflowPhasesDetails } from "@/actions/workflows/GetWorkflowPhasesDetails";
+import { ExecutionLog } from "@prisma/client";
+import { GetPhasesTotalCost } from "@/lib/phases";
+import { DatesToDurationString } from "@/lib/dates";
 
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
-import {Separator} from "@/components/ui/separator";
-import {ExecutionPhaseStatus, WorkflowExecutionStatus} from "@/types/workflow";
-import {Input} from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ExecutionPhaseStatus, WorkflowExecutionStatus } from "@/types/workflow";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardHeader,
@@ -40,9 +40,9 @@ import {
   LucideIcon,
   WorkflowIcon
 } from "lucide-react";
-import {cn} from "@/lib/utils";
-import {LogLevel} from "@/types/log";
-import {PhaseStatusBadge} from "@/app/workflow/runs/[workflowId]/[executionId]/_components/PhaseStatusBadge";
+import { cn } from "@/lib/utils";
+import { LogLevel } from "@/types/log";
+import { PhaseStatusBadge } from "@/app/workflow/runs/[workflowId]/[executionId]/_components/PhaseStatusBadge";
 import { ReactCountUpWrapper } from "@/components/ReactCountUpWrapper";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
@@ -101,7 +101,10 @@ export const ExecutionViewer = ({
           <ExecutionLabel
             icon={CircleDashedIcon}
             label="Status"
-            value={query.data?.status}
+            value={<div className="font-semibold capitalize flex gap-2 items-center">
+              <PhaseStatusBadge status={query.data?.status as ExecutionPhaseStatus} />
+              <span>{query.data?.status}</span>
+            </div>}
           />
           <ExecutionLabel
             icon={CalendarIcon}
@@ -119,7 +122,7 @@ export const ExecutionViewer = ({
           <ExecutionLabel
             icon={ClockIcon}
             label="Duration"
-            value={duration ? duration : <Loader2Icon className="animate-spin" size={20}/>}
+            value={duration ? duration : <Loader2Icon className="animate-spin" size={20} />}
           />
           <ExecutionLabel
             icon={CoinsIcon}
@@ -127,14 +130,14 @@ export const ExecutionViewer = ({
             value={<ReactCountUpWrapper value={creditsConsumed} />}
           />
         </div>
-        <Separator/>
+        <Separator />
         <div className="flex justify-center items-center py-2 px-4">
           <div className="text-muted-foreground flex items-center gap-2">
-            <WorkflowIcon size={20} className="stroke-muted-foreground/80"/>
+            <WorkflowIcon size={20} className="stroke-muted-foreground/80" />
             <span className="font-semibold">Phases</span>
           </div>
         </div>
-        <Separator/>
+        <Separator />
         <div className="overflow-auto h-full px-2 py-4">
           {query.data?.phases.map((phase, index) => (
             <Button
@@ -152,7 +155,7 @@ export const ExecutionViewer = ({
                   {phase.name}
                 </p>
               </div>
-              <PhaseStatusBadge status={phase.status as ExecutionPhaseStatus}/>
+              <PhaseStatusBadge status={phase.status as ExecutionPhaseStatus} />
             </Button>
           ))}
         </div>
@@ -178,14 +181,14 @@ export const ExecutionViewer = ({
             <div className="flex gap-2 items-center">
               <Badge variant="outline" className="space-x-4">
                 <div className="flex gap-1 items-center">
-                  <CoinsIcon size={18} className="stroke-muted-foreground"/>
+                  <CoinsIcon size={18} className="stroke-muted-foreground" />
                   <span>Credits</span>
                 </div>
                 <span>{phaseDetails.data.creditsConsumed}</span>
               </Badge>
               <Badge variant="outline" className="space-x-4">
                 <div className="flex gap-1 items-center">
-                  <ClockIcon size={18} className="stroke-muted-foreground"/>
+                  <ClockIcon size={18} className="stroke-muted-foreground" />
                   <span>Duration</span>
                 </div>
                 <span>
@@ -206,7 +209,7 @@ export const ExecutionViewer = ({
               subtitle="Outputs generated by this phase"
               paramsJson={phaseDetails.data.outputs}
             />
-            <LogViewer logs={phaseDetails.data.logs}/>
+            <LogViewer logs={phaseDetails.data.logs} />
           </div>
         )}
       </div>
@@ -241,7 +244,7 @@ function ExecutionLabel({
   );
 }
 
-const ParameterViewer = ({title, subtitle, paramsJson}: {
+const ParameterViewer = ({ title, subtitle, paramsJson }: {
   title: string,
   subtitle: string,
   paramsJson: string | null
@@ -262,7 +265,7 @@ const ParameterViewer = ({title, subtitle, paramsJson}: {
             Object.entries(params).map(([key, value]) => (
               <div key={key} className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground flex-1 basis-1/3">{key}</p>
-                <Input readOnly className="flex-1 basis-2/3" value={value as string}/>
+                <Input readOnly className="flex-1 basis-2/3" value={value as string} />
               </div>
             ))}
         </div>
@@ -271,7 +274,7 @@ const ParameterViewer = ({title, subtitle, paramsJson}: {
   )
 }
 
-const LogViewer = ({logs}: { logs: ExecutionLog[] | undefined }) => {
+const LogViewer = ({ logs }: { logs: ExecutionLog[] | undefined }) => {
   if (!logs || logs.length === 0) return null;
 
   return (
