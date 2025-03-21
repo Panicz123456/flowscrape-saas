@@ -7,15 +7,24 @@ import { useRouter } from "next/navigation"
 import { SaveBtn } from "./SaveButton"
 import { ExecuteBtn } from "./ExecuteBtn"
 import { NavigationTabs } from "./NavigationTabs"
+import { PublishBtn } from "./PublishBtn"
+import { UnPublishBtn } from "./UnPublishBtn"
 
 interface iAppProps {
   title: string;
   workflowId: string;
   subtitle?: string;
-  hideButtons?: boolean
+  hideButtons?: boolean;
+  isPublished?: boolean
 }
 
-export const Topbar = ({ title, subtitle, workflowId, hideButtons = false }: iAppProps) => {
+export const Topbar = ({
+  title,
+  subtitle,
+  workflowId,
+  hideButtons = false,
+  isPublished = false
+}: iAppProps) => {
   const router = useRouter()
 
   return (
@@ -43,7 +52,15 @@ export const Topbar = ({ title, subtitle, workflowId, hideButtons = false }: iAp
         {!hideButtons && (
           <>
             <ExecuteBtn workflowId={workflowId} />
-            <SaveBtn workflowId={workflowId} />
+            {isPublished && (
+              <UnPublishBtn workflowId={workflowId} />
+            )}
+            {!isPublished && (
+              <>
+                <SaveBtn workflowId={workflowId} />
+                <PublishBtn workflowId={workflowId} />
+              </>
+            )}
           </>
         )}
       </div>
