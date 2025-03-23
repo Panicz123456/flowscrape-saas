@@ -3,7 +3,7 @@ import { Topbar } from "@/app/workflow/_components/topbar/topbar"
 import { Loader2 } from "lucide-react"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
-import { ExecutionViewer } from "./_components/ExecutionViewer"
+import ExecutionViewer from "./_components/ExecutionViewer"
 
 const ExecutionViewerPage = ({ params }: {
   params: {
