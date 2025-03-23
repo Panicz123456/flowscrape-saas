@@ -15,9 +15,8 @@ import { Browser, Page } from "puppeteer";
 import { Edge } from "@xyflow/react";
 import { LogCollector } from "@/types/log";
 import { createLogCollector } from "@/lib/log";
-import { auth } from "@clerk/nextjs/server";
 
-export async function ExecutionWorkflow(executionId: string) {
+export async function ExecutionWorkflow(executionId: string, nextRunAt?: Date) {
   const execution = await prisma.workflowExecution.findUnique({
     where: {
       id: executionId,
@@ -36,15 +35,17 @@ export async function ExecutionWorkflow(executionId: string) {
 
   const environment: Environment = { phases: {} };
 
-  await initializeWorkflowExecution(executionId, execution.workflowId);
+  await initializeWorkflowExecution(
+    executionId,
+    execution.workflowId,
+    nextRunAt
+  );
   await initializePhaseStatus(execution);
 
   let creditConsumed = 0;
   let executionFailed = false;
 
   for (const phase of execution.phases) {
-
-
     const phaseExecution = await executeWorkflowPhase(
       phase,
       environment,
@@ -73,7 +74,8 @@ export async function ExecutionWorkflow(executionId: string) {
 
 async function initializeWorkflowExecution(
   executionId: string,
-  workflowId: string
+  workflowId: string,
+  nextRunAt?: Date
 ) {
   await prisma.workflowExecution.update({
     where: {
@@ -93,6 +95,7 @@ async function initializeWorkflowExecution(
       lastRunAt: new Date(),
       lastRunId: executionId,
       lastRunStatus: WorkflowExecutionStatus.RUNNING,
+      ...(nextRunAt && { nextRunAt }),
     },
   });
 }
@@ -179,7 +182,13 @@ async function executeWorkflowPhase(
   }
 
   const outputs = environment.phases[node.id].outputs;
-  await finalizePhase(phase.id, success, outputs, logCollector, creditsConsumed);
+  await finalizePhase(
+    phase.id,
+    success,
+    outputs,
+    logCollector,
+    creditsConsumed
+  );
   return { success, creditsConsumed };
 }
 
