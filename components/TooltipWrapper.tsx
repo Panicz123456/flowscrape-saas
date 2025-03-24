@@ -14,6 +14,10 @@ interface iAppProps {
 }
 
 export const TooltipWrapper = (props: iAppProps) => {
+  if (!props.content) {
+    return props.children
+  }
+
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
