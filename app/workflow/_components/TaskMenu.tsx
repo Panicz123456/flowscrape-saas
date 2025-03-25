@@ -12,7 +12,7 @@ export const TaskMenu = () => {
       <Accordion
         type="multiple"
         className="w-full"
-        defaultValue={["extraction", "interaction", "timing"]}
+        defaultValue={["extraction", "interaction", "timing", "result"]}
       >
         <AccordionItem value="interaction">
           <AccordionTrigger className="font-bold">
@@ -38,6 +38,14 @@ export const TaskMenu = () => {
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
             <TaskMenuBtn taskType={TaskType.WAIT_FOR_ELEMENT} />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="result">
+          <AccordionTrigger className="font-bold">
+            Result delivery
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.DELIVER_VIA_WEBHOOK} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
