@@ -12,7 +12,7 @@ export const TaskMenu = () => {
       <Accordion
         type="multiple"
         className="w-full"
-        defaultValue={["extraction", "interaction"]}
+        defaultValue={["extraction", "interaction", "timing"]}
       >
         <AccordionItem value="interaction">
           <AccordionTrigger className="font-bold">
@@ -20,6 +20,7 @@ export const TaskMenu = () => {
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
             <TaskMenuBtn taskType={TaskType.FILL_INPUT} />
+            <TaskMenuBtn taskType={TaskType.CLICK_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="extraction">
@@ -29,6 +30,14 @@ export const TaskMenu = () => {
           <AccordionContent className="flex flex-col gap-1">
             <TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
             <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="timing">
+          <AccordionTrigger className="font-bold">
+            Timing controls
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.WAIT_FOR_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
