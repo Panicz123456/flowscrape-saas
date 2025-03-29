@@ -1,17 +1,9 @@
 "use client";
 
+import { createCredential } from "@/actions/credentials/createCredential";
 import { CustomDialogHeader } from "@/components/CustomDialogHeader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  createWorkflowSchema,
-  createWorkflowSchemaType,
-} from "@/schema/workflow";
-import { Layers2Icon, Loader2, ShieldEllipsis } from "lucide-react";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -23,36 +15,36 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation } from "@tanstack/react-query";
-import { createWorkflow } from "@/actions/workflows/createWorkflow";
-import { toast } from "sonner";
 import { createCredentialsSchema, createCredentialsSchemaType } from "@/schema/credentials";
-import { createCredential } from "@/actions/credentials/createCredential";
 
-export const CreateCredentialsDialog = ({
-  triggerText,
-}: {
-  triggerText?: string;
-}) => {
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Layers2Icon, Loader2 } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
+function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
   const [open, setOpen] = useState(false);
 
   const form = useForm<createCredentialsSchemaType>({
     resolver: zodResolver(createCredentialsSchema),
+    defaultValues: {},
   });
-
   const { mutate, isPending } = useMutation({
     mutationFn: createCredential,
     onSuccess: () => {
-      toast.success("Credentials created successfully", { id: "create-credentials" });
+      toast.success("Credential created", { id: "create-credential" });
+      setOpen(false);
     },
-    onError: () => {
-      toast.error("Something went wrong", { id: "create-credentials" });
+    onError: (error: any) => {
+      toast.error("Failed to create credential", { id: "create-credential" });
     },
   });
 
   const onSubmit = useCallback(
     (values: createCredentialsSchemaType) => {
-      toast.loading("Creating credentials...", { id: "create-workflow" });
+      toast.loading("Creating credential...", { id: "create-credential" });
       mutate(values);
     },
     [mutate]
@@ -64,63 +56,63 @@ export const CreateCredentialsDialog = ({
       onOpenChange={(open) => {
         form.reset();
         setOpen(open);
-      }}>
+      }}
+    >
       <DialogTrigger asChild>
-        <Button>{triggerText ?? "Create"}</Button>
+        <Button>{triggeredText ?? "Create credential"}</Button>
       </DialogTrigger>
       <DialogContent className="px-0">
-        <CustomDialogHeader
-          icon={ShieldEllipsis}
-          title="Create credentials"
-          subtitle="Start building your credentials"
-        />
+        <CustomDialogHeader icon={Layers2Icon} title="Create Credential" />
         <div className="p-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+              className="space-y-8 w-full"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex gap-1 items-center">
-                      Name
-                      <p className="text-xs text-primary">(required)</p>
+                      Name <p className="text-xs text-primary">(required)</p>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Choose a destructive and unique name
+                      Enter an unique and descriptive name for credential <br />
+                      This name will be used to identify credential
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="value"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex gap-1 items-center">
-                      Value
-                      <p className="text-xs text-primary">(required)</p>
+                      Value{" "}
+                      <p className="text-xs text-primary">
+                        (required)
+                      </p>
                     </FormLabel>
                     <FormControl>
-                      <Textarea className="resize-none" {...field} />
+                      <Textarea {...field} className="resize-none" />
                     </FormControl>
                     <FormDescription>
-                      Choose good description to find credentials easier <br />
-                      this is optional but can help you remember the credentials
-                      purpose
+                      Enter the value associated with this credential <br />
+                      This value will be securely encrypted and stored
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button disabled={isPending} type="submit" className="w-full">
-                {!isPending && "Create Credentials"}
-                {isPending && <Loader2 className="animate-spin" />}
+
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {!isPending ? "Proceed" : <Loader2 className="animate-spin" />}
               </Button>
             </form>
           </Form>
@@ -128,4 +120,6 @@ export const CreateCredentialsDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
+}
+
+export default CreateCredentialDialog;

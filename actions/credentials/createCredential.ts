@@ -24,11 +24,16 @@ export async function createCredential(form: createCredentialsSchemaType) {
 
   const encryptValue = symmetricEncrypt(data.value as string);
 
+  console.log("@test", { 
+  plain: data.value,
+  encrypted: encryptValue
+  })
+
   const result = await prisma.credential.create({
     data: {
       userId,
       name: data.name,
-      value: data.value,
+      value: encryptValue,
     },
   });
 
