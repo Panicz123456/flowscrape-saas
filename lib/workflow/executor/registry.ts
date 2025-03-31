@@ -1,16 +1,17 @@
-import { LaunchBrowserExecutor } from "@/lib/workflow/executor/LaunchBrowserExecutor";
-import { PageToHtmlExecutor } from "@/lib/workflow/executor/PageToHtmlExecutor";
-import { ExtractTextFromElementExecutor } from "@/lib/workflow/executor/ExtractTextFromElementExecutor";
-
 import { ExecutionEnvironment } from "@/types/executor";
 import { WorkflowTask } from "@/types/workflow";
 import { TaskType } from "@/types/task";
+
+import { LaunchBrowserExecutor } from "@/lib/workflow/executor/LaunchBrowserExecutor";
+import { PageToHtmlExecutor } from "@/lib/workflow/executor/PageToHtmlExecutor";
+import { ExtractTextFromElementExecutor } from "@/lib/workflow/executor/ExtractTextFromElementExecutor";
 import { FillInputExecutor } from "./FillInputExecutor";
 import { ClickElementExecutor } from "./ClickElementExecutor";
 import { WaitForElementExecutor } from "./WaitForElementExecutor";
 import { DeliverViaWebhookExecutor } from "./DeliverViaWebhookExecutor";
 import { ExtractDataWithAIExecutor } from "./ExtractDataWithAIExecutor";
 import { ReadPropertyFromJsonExecutor } from "./ReadPropertiesFromJSONExecutor";
+import { AddPropertiesToJsonExecutor } from "./AddPropertiesToJsonExecutor";
 
 type ExecutionFn<T extends WorkflowTask> = (
   environment: ExecutionEnvironment<T>
@@ -29,5 +30,6 @@ export const ExecutorRegistry: RegistryType = {
   WAIT_FOR_ELEMENT: WaitForElementExecutor,
   DELIVER_VIA_WEBHOOK: DeliverViaWebhookExecutor,
   EXTRACT_DATA_WITH_AI: ExtractDataWithAIExecutor,
-  READ_PROPERTIES_FROM_JSON: ReadPropertyFromJsonExecutor
+  READ_PROPERTIES_FROM_JSON: ReadPropertyFromJsonExecutor,
+  ADD_PROPERTIES_TO_JSON: AddPropertiesToJsonExecutor,
 };
