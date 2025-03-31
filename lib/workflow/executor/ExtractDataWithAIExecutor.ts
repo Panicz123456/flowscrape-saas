@@ -44,6 +44,7 @@ export async function ExtractDataWithAIExecutor(
       environment.log.error("cannot decrypt credential");
       return false;
     }
+
     const openai = new OpenAi({
       apiKey: plainCredentialValue,
     });
@@ -66,7 +67,6 @@ export async function ExtractDataWithAIExecutor(
         },
       ],
       temperature: 1,
-      max_tokens: 10000,
     });
 
     environment.log.info(
@@ -74,7 +74,7 @@ export async function ExtractDataWithAIExecutor(
     );
 
     environment.log.info(
-      `Completition tokens used: ${JSON.stringify(
+      `Competition tokens used: ${JSON.stringify(
         response.usage?.completion_tokens
       )}`
     );
@@ -86,7 +86,7 @@ export async function ExtractDataWithAIExecutor(
       return false;
     }
 
-    environment.setOutput("Extract data", JSON.stringify(result));
+    environment.setOutput("Extract data", result);
 
     return true;
   } catch (error: any) {

@@ -8,11 +8,13 @@ export async function DeliverViaWebhookExecutor(
     const URL = environment.getInput("Target URL");
     if (!URL) {
       environment.log.error("input->targetUrl not defined");
+      return false
     }
 
     const body = environment.getInput("Body");
     if (!body) {
       environment.log.error("invalid body");
+      return false
     }
 
     const response = await fetch(URL, {
