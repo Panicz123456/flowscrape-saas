@@ -298,11 +298,11 @@ function createExecutionEnvironment(
 }
 
 async function cleanupEnvironment(environment: Environment) {
-  if (environment.browser) {
-    await environment.browser
-      .close()
-      .catch((err) => console.log("cannot close browser, reason:", err));
-  }
+  // if (environment.browser) {
+  //   await environment.browser
+  //     .close()
+  //     .catch((err) => console.log("cannot close browser, reason:", err));
+  // }
 }
 
 async function decrementCredits(
