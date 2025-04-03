@@ -55,8 +55,8 @@ export const DesktopSidebar = () => {
       <div className="flex flex-col p-2 gap-2">
         {routes.map((route) => (
           <Link
-            href={route.href}
             key={route.label}
+            href={`/${route.href}`}
             className={buttonVariants({
               variant:
                 isActive.href === route.href
