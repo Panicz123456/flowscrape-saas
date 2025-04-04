@@ -1,15 +1,28 @@
 "use client"
 
+import { PurchaseCredits } from "@/actions/billing/PurchaseCredits"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { CreditsPack, PackId } from "@/types/billing"
+import { useMutation } from "@tanstack/react-query"
 import { CoinsIcon, CreditCard } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 export const CreditsPurchase = () => {
   const [selectedPack, setSelectedPack] = useState(PackId.MEDIUM)
+
+  const mutation = useMutation({
+    mutationFn: PurchaseCredits,
+    onSuccess: () => {
+      toast.success("Credits Purchase successfully")
+    },
+    onError: () => {
+      toast.error("Something went wrong")
+    }
+  })
 
   return (
     <Card>
@@ -43,7 +56,12 @@ export const CreditsPurchase = () => {
         </RadioGroup>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">
+        <Button
+          className="w-full"
+          disabled={mutation.isPending}
+          onClick={() => {
+            mutation.mutate(selectedPack)
+          }}>
           <CreditCard className="mr-2 size-5" /> Purchase credits
         </Button>
       </CardFooter>
