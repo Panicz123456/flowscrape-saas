@@ -4,20 +4,20 @@ import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export async function SetupUser() {
+export async function setupUser() {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("unauthorized");
+    throw new Error("Unauthenticated");
   }
 
-  const balance = await prisma.userBalance.findUnique({
+  const userBalance = await prisma.userBalance.findUnique({
     where: {
       userId,
     },
   });
 
-  if (!balance) {
+  if (!userBalance) {
     await prisma.userBalance.create({
       data: {
         userId,
@@ -26,5 +26,5 @@ export async function SetupUser() {
     });
   }
 
-  redirect("/");
+  redirect("/home");
 }

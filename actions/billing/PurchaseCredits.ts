@@ -6,17 +6,19 @@ import { getCreditsPack, PackId } from "@/types/billing";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export async function PurchaseCredits(packId: PackId) {
+export async function purchaseCredits(packId: PackId) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error("unauthorized");
+    throw new Error("Unauthenticated");
   }
 
   const selectedPack = getCreditsPack(packId);
+
   if (!selectedPack) {
-    throw new Error("invalid pack");
+    throw new Error("Inavlid package");
   }
+
   const priceId = selectedPack?.priceId;
 
   const session = await stripe.checkout.sessions.create({
@@ -26,6 +28,8 @@ export async function PurchaseCredits(packId: PackId) {
     },
     success_url: getAppUrl("billing"),
     cancel_url: getAppUrl("billing"),
+
+    // adding custom details to session info via metadata
     metadata: {
       userId,
       packId,
@@ -33,14 +37,14 @@ export async function PurchaseCredits(packId: PackId) {
     line_items: [
       {
         quantity: 1,
-        price: selectedPack.priceId,
+        price: priceId, // here price refer to priceId from stripe
       },
     ],
   });
 
-  if(!session.url) { 
-    throw new Error("cannot find session url")
+  if (!session.url) {
+    throw new Error("Cannot create stripe session");
   }
 
-  redirect(session.url)
+  redirect(session.url);
 }

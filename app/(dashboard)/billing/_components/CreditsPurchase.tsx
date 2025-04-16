@@ -1,6 +1,6 @@
 "use client"
 
-import { PurchaseCredits } from "@/actions/billing/PurchaseCredits"
+import { purchaseCredits } from "@/actions/billing/PurchaseCredits"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -15,7 +15,7 @@ export const CreditsPurchase = () => {
   const [selectedPack, setSelectedPack] = useState(PackId.MEDIUM)
 
   const mutation = useMutation({
-    mutationFn: PurchaseCredits,
+    mutationFn: purchaseCredits,
     onSuccess: () => {
       toast.success("Credits Purchase successfully")
     },
